@@ -1,6 +1,6 @@
 package br.kenobysky;
 
-import br.kenobysky.models.User;
+import br.kenobysky.models.Client;
 import br.kenobysky.services.UserService;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,16 +25,18 @@ public class DefaultUserConfiguration implements CommandLineRunner {
         //
         PageRequest pageRequest = PageRequest.of(0, 5);
         
-        List<User> listaUsers = userService.listAll(pageRequest).getContent();
+        List<Client> listaUsers = userService.listAll(pageRequest).getContent();
         if (listaUsers.isEmpty()) {
             
-            User defaultUser = new User();
+            Client defautlClient = new Client();
             //
-            defaultUser.setCodigo("001");
-            defaultUser.setPassword("admin");
+            
+            //
+            defautlClient.setCode("001");
+            defautlClient.setPassword("admin");
 
             //
-            userService.save(defaultUser, true);
+            userService.save(defautlClient, true);
         }
         //
 

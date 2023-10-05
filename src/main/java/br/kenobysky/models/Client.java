@@ -20,7 +20,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 @Entity
 @Table(name = "users")
-public class User extends Model implements Comparable<User>, UserDetails {
+public class Client extends Model implements Comparable<Client>, UserDetails {
 
     @Column(name = "code", nullable = false, length = 255, unique = true)
     private String code;
@@ -40,17 +40,19 @@ public class User extends Model implements Comparable<User>, UserDetails {
 
 
 
-    public User() {
+    public Client() {
         super();
     }
 
-    public String getCodigo() {
+    public String getCode() {
         return code;
     }
 
-    public void setCodigo(String code) {
+    public void setCode(String code) {
         this.code = code;
     }
+
+    
 
 
 
@@ -105,7 +107,7 @@ public class User extends Model implements Comparable<User>, UserDetails {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final User other = (User) obj;
+        final Client other = (Client) obj;
         return Objects.equals(this.getId(), other.getId());
     }
 
@@ -126,8 +128,8 @@ public class User extends Model implements Comparable<User>, UserDetails {
     }
 
     @Override
-    public int compareTo(User o) {
-        return getCodigo().compareToIgnoreCase(o.getCodigo());
+    public int compareTo(Client o) {
+        return getCode().compareToIgnoreCase(o.getCode());
     }
 
     @Override
@@ -137,7 +139,7 @@ public class User extends Model implements Comparable<User>, UserDetails {
 
     @Override
     public String getUsername() {
-        return this.getCodigo();
+        return this.getCode();
     }
 
     @Override

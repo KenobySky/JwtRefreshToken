@@ -1,6 +1,6 @@
 package br.kenobysky.controllers;
 
-import br.kenobysky.models.User;
+import br.kenobysky.models.Client;
 import br.kenobysky.services.UserService;
 import jakarta.validation.Valid;
 import java.net.URI;
@@ -12,15 +12,15 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
 @RestController
-@RequestMapping(value = "/api/users")
-public class UserController {
+@RequestMapping(value = "/api/clients")
+public class ClientController {
 
     @Autowired
     private UserService service;
 
     @PostMapping
     @Transactional
-    public ResponseEntity<User> save(@Valid @RequestBody User user, UriComponentsBuilder uriBuilder) {
+    public ResponseEntity<Client> save(@Valid @RequestBody Client user, UriComponentsBuilder uriBuilder) {
         //Salva o user
         user = service.save(user, true);
 
@@ -30,7 +30,7 @@ public class UserController {
     }
 
     @PutMapping
-    public ResponseEntity<User> update(@RequestBody @Valid User user) {
+    public ResponseEntity<Client> update(@RequestBody @Valid Client user) {
 
         //Salva o consultor
         user = service.save(user, true);
@@ -41,8 +41,8 @@ public class UserController {
 
     @GetMapping("/{id}")
     @Transactional
-    public ResponseEntity<User> getOne(@PathVariable("id") Long id) {
-        Optional<User> user = service.get(id);
+    public ResponseEntity<Client> getOne(@PathVariable("id") Long id) {
+        Optional<Client> user = service.get(id);
 
         if (user.isPresent()) {
 

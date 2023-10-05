@@ -1,7 +1,7 @@
 package br.kenobysky.services;
 
 import br.kenobysky.config.MyPasswordEncoder;
-import br.kenobysky.models.User;
+import br.kenobysky.models.Client;
 import br.kenobysky.repositories.RoleRepository;
 import br.kenobysky.repositories.UserRepository;
 import java.util.List;
@@ -13,7 +13,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
-public class UserService implements ServiceDAO<User, Long> {
+public class UserService implements ServiceDAO<Client, Long> {
 
     @Autowired
     private UserRepository userRepo;
@@ -29,28 +29,28 @@ public class UserService implements ServiceDAO<User, Long> {
 
     }
 
-    public Page<User> listAll(PageRequest pageable) {
-        Page<User> lista = userRepo.findAll(pageable);
+    public Page<Client> listAll(PageRequest pageable) {
+        Page<Client> lista = userRepo.findAll(pageable);
         return lista;
     }
 
-    public List<User> listAll() {
-        List<User> lista = userRepo.findAll();
+    public List<Client> listAll() {
+        List<Client> lista = userRepo.findAll();
         return lista;
     }
 
-    public Optional<User> get(Long id) {
+    public Optional<Client> get(Long id) {
         return userRepo.get(id);
     }
 
-    public User save(User user) {
+    public Client save(Client user) {
 
         encodePassword(user);
 
         return userRepo.save(user);
     }
 
-    public User save(User user, boolean encodePassword) {
+    public Client save(Client user, boolean encodePassword) {
         if (encodePassword) {
             encodePassword(user);
         }
@@ -58,14 +58,14 @@ public class UserService implements ServiceDAO<User, Long> {
         return userRepo.save(user);
     }
 
-    public User update(User user, boolean encodePassword) {
+    public Client update(Client user, boolean encodePassword) {
         if (encodePassword) {
             encodePassword(user);
         }
         return userRepo.save(user);
     }
 
-    public void delete(User user) {
+    public void delete(Client user) {
 
 //        for (Informativo informativo : user.getInformativos()) {
 //            informativo.getUsuarios().remove(user);
@@ -74,7 +74,7 @@ public class UserService implements ServiceDAO<User, Long> {
         userRepo.delete(user);
     }
 
-    private void encodePassword(User user) {
+    private void encodePassword(Client user) {
 
         String encodedPassword = passwordEncoder.encode(user.getPassword());
         user.setPassword(encodedPassword);
