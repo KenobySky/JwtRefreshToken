@@ -42,7 +42,7 @@ public class AuthenticationService {
         var refreshToken = jwtService.generateRefreshToken(user);
         revokeAllUserTokens(user);
         saveUserToken(user, refreshToken);
-        
+
         return AuthenticationResponse.builder()
                 .accessToken(jwtToken)
                 .refreshToken(refreshToken)
@@ -61,15 +61,32 @@ public class AuthenticationService {
     }
 
     private void revokeAllUserTokens(Client user) {
-//        var validUserTokens = tokenRepository.findAllValidTokenByUser(user.getId());
-//        if (validUserTokens.isEmpty()) {
-//            return;
-//        }
-//        validUserTokens.forEach(token -> {
-//            token.setExpired(true);
-//            token.setRevoked(true);
-//        });
         tokenRepository.deleteByUser(user.getId());
+    }
+
+    public void logout(HttpServletRequest request, HttpServletResponse response) throws IOException {
+
+        final String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
+        final String token;
+        final String userCode;
+
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            return;
+        }
+
+        token = authHeader.substring(7);
+        userCode = jwtService.extractCode(token);
+
+        if (userCode != null) {
+            Optional<Client> client = this.repository.findByCode(userCode);
+            
+            if (client.isEmpty()) {
+                throw new NoSuchElementException("Token Inválido");
+            }
+
+            this.tokenRepository.deleteByUser(client.get().getId());
+        }
+
     }
 
     public void refreshToken(
@@ -85,7 +102,6 @@ public class AuthenticationService {
             return;
         }
 
-     
         oldRefreshToken = authHeader.substring(7);
         userCode = jwtService.extractCode(oldRefreshToken);
 
