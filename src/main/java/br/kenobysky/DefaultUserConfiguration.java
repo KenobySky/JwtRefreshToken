@@ -1,7 +1,7 @@
 package br.kenobysky;
 
 import br.kenobysky.models.Client;
-import br.kenobysky.services.UserService;
+import br.kenobysky.services.UserDetailsServiceImpl;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -16,7 +16,7 @@ import org.springframework.data.domain.PageRequest;
 public class DefaultUserConfiguration implements CommandLineRunner {
     
     @Autowired
-    private UserService userService;
+    private UserDetailsServiceImpl userService;
    
     @Override
     public void run(String... args) throws Exception {
@@ -28,15 +28,15 @@ public class DefaultUserConfiguration implements CommandLineRunner {
         List<Client> listaUsers = userService.listAll(pageRequest).getContent();
         if (listaUsers.isEmpty()) {
             
-            Client defautlClient = new Client();
+            Client defaultClient = new Client();
             //
             
             //
-            defautlClient.setCode("001");
-            defautlClient.setPassword("admin");
+            defaultClient.setCode("001");
+            defaultClient.setPassword("admin");
 
             //
-            userService.save(defautlClient, true);
+            userService.save(defaultClient, true);
         }
         //
 

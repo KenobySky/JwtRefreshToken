@@ -7,7 +7,6 @@ import java.net.URI;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -21,7 +20,6 @@ public class RoleController {
 
 
     @PostMapping
-    @Transactional
     public ResponseEntity<Role> save(@Valid @RequestBody Role role, UriComponentsBuilder uriBuilder) {
      
         //Salva o role
@@ -42,7 +40,6 @@ public class RoleController {
     }
 
     @GetMapping("/{id}")
-    @Transactional
     public ResponseEntity<Role> getOne(@PathVariable("id") Long id) {
         Optional<Role> role = service.get(id);
 

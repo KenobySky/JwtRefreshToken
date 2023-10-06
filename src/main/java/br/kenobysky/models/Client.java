@@ -19,7 +19,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 @Entity
-@Table(name = "users")
+@Table(name = "clients")
 public class Client extends Model implements Comparable<Client>, UserDetails {
 
     @Column(name = "code", nullable = false, length = 255, unique = true)
@@ -33,7 +33,7 @@ public class Client extends Model implements Comparable<Client>, UserDetails {
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
-            name = "usuarios_roles",
+            name = "clients_roles",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles = new HashSet<>();

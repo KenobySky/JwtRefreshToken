@@ -1,7 +1,9 @@
 package br.kenobysky.config.security;
 
 import br.kenobysky.config.MyPasswordEncoder;
+import br.kenobysky.config.security.filters.JwtAuthenticationFilter;
 import br.kenobysky.services.UserDetailsServiceImpl;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -11,6 +13,7 @@ import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.CorsConfigurer;
 import org.springframework.security.config.annotation.web.configurers.CsrfConfigurer;
 import org.springframework.security.config.annotation.web.configurers.ExceptionHandlingConfigurer;
@@ -18,16 +21,20 @@ import org.springframework.security.config.annotation.web.configurers.SessionMan
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
+@EnableWebSecurity
+@RequiredArgsConstructor
 @EnableMethodSecurity(prePostEnabled = true, securedEnabled = true)
 public class SecurityConfiguration {
 
     @Autowired
     UserDetailsServiceImpl userDetailsService;
 
+    private final JwtAuthenticationFilter jwtFilter;
 
     @Bean
     public DaoAuthenticationProvider authenticationProvider() {
@@ -66,17 +73,14 @@ public class SecurityConfiguration {
         });
 
         http.authorizeHttpRequests((t) -> {
-            t.requestMatchers("/auth/login").permitAll()
-                    .requestMatchers("api/usuarios/recovery/**").permitAll()
-                    .requestMatchers("/auth/login").permitAll()
-                   
-
+            t.requestMatchers("/api/auth/login").permitAll()
+                    .requestMatchers("/api/auth/refresh-token").permitAll()
                     .anyRequest().authenticated();
         });
 
         http.authenticationProvider(authenticationProvider());
 
-        //http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 
         http.cors(new Customizer<CorsConfigurer<HttpSecurity>>() {
             @Override

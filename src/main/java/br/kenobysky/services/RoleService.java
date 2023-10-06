@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class RoleService implements ServiceDAO<Role, Long> {
@@ -26,6 +27,7 @@ public class RoleService implements ServiceDAO<Role, Long> {
     }
 
     @Override
+    @Transactional
     public Role save(Role obj) {
         return repository.save(obj);
     }
@@ -36,6 +38,7 @@ public class RoleService implements ServiceDAO<Role, Long> {
     }
 
     @Override
+    @Transactional
     public Optional<Role> get(Long id) {
         return repository.get(id);
 
